@@ -60,6 +60,7 @@ const Question = ({ mongoUserId }: Props) => {
       router.push("/");
     } catch (error) {
     } finally {
+      setIsSubmitting(false);
     }
   }
 
