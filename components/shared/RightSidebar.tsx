@@ -24,22 +24,22 @@ const RightSidebar = () => {
 
   const popularTags = [
     {
-      _id: 1,
+      _id: "1",
       name: "REACT.js",
       totalQuestions: 7,
     },
     {
-      _id: 2,
+      _id: "2",
       name: "NEXT js",
       totalQuestions: 45,
     },
     {
-      _id: 3,
+      _id: "3",
       name: "JavaScript",
       totalQuestions: 3,
     },
     {
-      _id: 4,
+      _id: "4",
       name: "MongoDB",
       totalQuestions: 1,
     },

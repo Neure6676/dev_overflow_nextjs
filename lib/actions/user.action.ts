@@ -2,6 +2,12 @@
 
 import User from "@/database/user.model";
 import { connectToDatabase } from "../mongoose";
+import {
+  CreateUserParams,
+  DeleteUserParams,
+  UpdateUserParams,
+} from "./shared.types";
+import { revalidatePath } from "next/cache";
 
 export async function getUserById(params: any) {
   try {
@@ -13,7 +19,66 @@ export async function getUserById(params: any) {
 
     return user;
   } catch (error) {
-    console.log("Failed to get the user");
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function createUser(userData: CreateUserParams) {
+  try {
+    connectToDatabase();
+
+    const newUser = await User.create(userData);
+    return newUser;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function updateUser(params: UpdateUserParams) {
+  try {
+    connectToDatabase();
+
+    const { clerkId, updateData, path } = params;
+
+    await User.findByIdAndUpdate({ clerkId }, updateData, {
+      new: true,
+    });
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function deleteUser(params: DeleteUserParams) {
+  try {
+    connectToDatabase();
+
+    const { clerkId } = params;
+
+    const user: any = await User.findByIdAndDelete({ clerkId });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Delete user from db
+    // and questions, anwsers, comments, etc
+
+    // get user question ids
+    const userQuestionIds = await User.find({ author: user._id }).distinct(
+      "_id"
+    );
+
+    // delete user questions
+    await User.deleteMany({ author: user._id });
+
+    const deletedUser = await User.findByIdAndDelete(user._id);
+    return deleteUser;
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 }
