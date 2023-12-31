@@ -98,6 +98,7 @@ const Votes = ({
       userId: userId ? JSON.parse(userId) : undefined,
     });
   }, [itemId, userId, pathname, router]);
+
   return (
     <div className="flex gap-5">
       <div className="flex-center gap-2.5">
