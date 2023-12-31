@@ -1,16 +1,16 @@
-import Metric from "@/components/shared/Metrix";
+import Answer from "@/components/forms/Answer";
+import AllAnswers from "@/components/shared/AllAnswers";
+import Metric from "@/components/shared/Metric";
+import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
-import Answer from "@/database/answer.model";
+import Votes from "@/components/shared/Votes";
 import { getQuestionById } from "@/lib/actions/question.action";
+import { getUserById } from "@/lib/actions/user.action";
 import { fortmatAndDivideNumber, getTimestamp } from "@/lib/utils";
+import { auth } from "@clerk/nextjs";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import Image from "next/image";
-import ParseHTML from "@/components/shared/ParseHTML";
-import { auth } from "@clerk/nextjs";
-import { getUserById } from "@/lib/actions/user.action";
-import AllAnswers from "@/components/shared/AllAnswers";
-import Votes from "@/components/shared/Votes";
 
 const Page = async ({ params, searchParams }: any) => {
   const result = await getQuestionById({ questionId: params.id });
@@ -43,13 +43,13 @@ const Page = async ({ params, searchParams }: any) => {
           </Link>
           <div className="flex justify-end">
             <Votes
-              type="question"
-              itemId={JSON.stringify(result._id)}
+              type="Question"
+              itemId={JSON.stringify(result.id)}
               userId={JSON.stringify(mongoUser._id)}
               upvotes={result.upvotes.length}
-              hasupVoted={result.upvotes.includes(mongoUser)._id}
+              hasupVoted={result.upvotes.includes(mongoUser._id)}
               downvotes={result.downvotes.length}
-              hasdownVoted={result.downvotes.includes(mongoUser)._id}
+              hasdownVoted={result.downvotes.includes(mongoUser._id)}
               hasSaved={mongoUser?.saved.includes(result._id)}
             />
           </div>
@@ -97,8 +97,6 @@ const Page = async ({ params, searchParams }: any) => {
         questionId={result._id}
         userId={mongoUser._id}
         totalAnswers={result.answers.length}
-        page={searchParams?.page}
-        filter={searchParams?.filter}
       />
 
       <Answer
@@ -109,5 +107,4 @@ const Page = async ({ params, searchParams }: any) => {
     </>
   );
 };
-
 export default Page;
