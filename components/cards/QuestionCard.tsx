@@ -1,8 +1,10 @@
 import Link from "next/link";
 import React from "react";
 import RenderTag from "../shared/RenderTag";
-import Metric from "../shared/Metrix";
+import Metric from "../shared/Metric";
 import { fortmatAndDivideNumber, getTimestamp } from "@/lib/utils";
+import { SignedIn } from "@clerk/nextjs";
+import EditDeleteQuestion from "../shared/EditDeleteQuestion";
 
 interface Props {
   _id: string;
@@ -16,13 +18,15 @@ interface Props {
     name: string;
     picture: string;
   };
-  upvotes: number;
+  upvotes: string[];
   views: number;
   answers: Array<object>;
   createdAt: Date;
+  clerkId?: string;
 }
 
 const QuestionCard = ({
+  clerkId,
   _id,
   title,
   tags,
@@ -32,6 +36,8 @@ const QuestionCard = ({
   answers,
   createdAt,
 }: Props) => {
+  const showActionButtons = clerkId && clerkId === author.clerkId;
+
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
       <div className="flex flex-col-reverse items-start justify-between  gap-5 sm:flex-row">
@@ -45,6 +51,12 @@ const QuestionCard = ({
             </h3>
           </Link>
         </div>
+
+        <SignedIn>
+          {showActionButtons && (
+            <EditDeleteQuestion type="Question" itemId={JSON.stringify(_id)} />
+          )}
+        </SignedIn>
       </div>
 
       <div className="mt-3.5 flex flex-wrap gap-2">
@@ -55,7 +67,7 @@ const QuestionCard = ({
 
       <div className="flex-between mt-6 w-full flex-wrap gap-3">
         <Metric
-          imgUrl="/assets/icons/avatar.svg"
+          imgUrl={author.picture}
           alt="User"
           value={author.name}
           title={` - asked ${getTimestamp(createdAt)}`}
@@ -66,7 +78,7 @@ const QuestionCard = ({
         <Metric
           imgUrl="/assets/icons/like.svg"
           alt="Upvotes"
-          value={fortmatAndDivideNumber(upvotes)}
+          value={fortmatAndDivideNumber(upvotes.length)}
           title="Votes"
           textStyles="small-medium text-dark400_light800"
         />
