@@ -34,6 +34,7 @@ export async function getQuestions(params: GetQuestionsParams) {
         { content: { $regex: new RegExp(searchQuery, "i") } },
       ];
     }
+
     let sortOptions = {};
 
     switch (filter) {
