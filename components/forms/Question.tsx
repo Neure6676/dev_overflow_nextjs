@@ -259,17 +259,20 @@ const Question = ({ type, mongoUserId, questionDetails }: Props) => {
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          className="primary-gradient w-fit !text-light-900"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? (
-            <>{type === "Edit" ? "Editing..." : "Posting..."}</>
-          ) : (
-            <>{type === "Edit" ? "Edit Question" : "Ask a Question"}</>
-          )}
-        </Button>
+
+        <div className="flex justify-end">
+          <Button
+            type="submit"
+            className="primary-gradient w-fit !text-light-900"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>{type === "Edit" ? "Editing..." : "Posting..."}</>
+            ) : (
+              <>{type === "Edit" ? "Edit Question" : "Ask a Question"}</>
+            )}
+          </Button>
+        </div>
       </form>
     </Form>
   );
