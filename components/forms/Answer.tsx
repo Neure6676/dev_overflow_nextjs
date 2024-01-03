@@ -79,7 +79,7 @@ const Answer = ({ question, questionId, authorId }: Props) => {
 
       const aiAnswer = await response.json();
       // console.log(aiAnswer);
-      console.log(aiAnswer);
+
       if (aiAnswer.reply) {
         alert(aiAnswer.reply);
       } else {
@@ -89,7 +89,7 @@ const Answer = ({ question, questionId, authorId }: Props) => {
       }
       // alert(aiAnswer.reply);
 
-      // Convert plain text to HTML format
+      // Convert plain text to HTML format, replace every new line to break tag
       const formattedAnswer = aiAnswer.reply
         ? aiAnswer.reply.replace(/\n/g, "<br />")
         : "";
